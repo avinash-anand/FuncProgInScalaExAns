@@ -2,6 +2,11 @@ package com.fpis.ch2
 
 import scala.annotation.tailrec
 
+/**
+ * EXERCISE 1 (optional): Write a function to get the nth Fibonacci number.
+ * The first two Fibonacci numbers are 0 and 1, and the next number is always the sum of the previous two.
+ * Your definition should use a local tail-recursive function.
+ */
 object Ex1_Fibonacci {
 
   def fib(n: Int): Int = {
