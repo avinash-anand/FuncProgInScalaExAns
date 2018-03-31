@@ -62,7 +62,6 @@ class Ex1_FibonacciSpec extends FlatSpec with Matchers {
 
   it should "for n=10, return 89" in {
     val result = Ex1_Fibonacci.fib(10)
-//    println(s"### 10 $result")
     result shouldBe (89)
   }
 
