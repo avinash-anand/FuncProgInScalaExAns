@@ -14,11 +14,11 @@ class Ex2_IsSortedSpec extends FlatSpec with Matchers {
     assert(Ex2_IsSorted.isSorted(arr1, gtIntAsc))
   }
 
-  "Ex2_IsSorted - isSorted method" should "return true for sorted int array in reverse direction" in {
+  it should "return true for sorted int array in reverse direction" in {
     assert(Ex2_IsSorted.isSorted(arr1.reverse, gtIntDesc))
   }
 
-  "Ex2_IsSorted - isSorted method" should "return false for reverse-sorted int array" in {
+  it should "return false for reverse-sorted int array" in {
     assert(!Ex2_IsSorted.isSorted(arr1, gtIntDesc))
   }
 
