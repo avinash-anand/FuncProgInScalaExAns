@@ -9,6 +9,15 @@ package com.fpis.ch2
 
 object Ex4_Curry {
 
-  def curry[A,B,C](f: (A, B) => C): A => (B => C) = ???
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = {
+    //cheating would be this line
+    //def fn(a: A): B => C = f(a, _)
+
+    def f1(a: A): B => C = {
+      Ex3_Partial1.partial1(a, f)
+    }
+
+    f1
+  }
 
 }

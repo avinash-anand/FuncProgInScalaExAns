@@ -13,10 +13,11 @@ package com.fpis.ch2
 
 object Ex3_Partial1 {
 
-  def partial1[A,B,C](a: A, f: (A,B) => C): B => C = {
+  def partial1[A, B, C](a: A, f: (A, B) => C): B => C = {
     //using scala _ is cheating here :)
     //f(a, _)
     def f_fromBtoC: B => C = (b: B) => f(a, b)
+
     f_fromBtoC
   }
 

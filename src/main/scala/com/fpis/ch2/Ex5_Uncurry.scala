@@ -8,6 +8,10 @@ package com.fpis.ch2
 
 object Ex5_Uncurry {
 
-  def uncurry[A,B,C](f: A => B => C): (A, B) => C = ???
+  def uncurry[A, B, C](f: A => B => C): (A, B) => C = {
+    def fn(a: A, b: B): C = f(a)(b)
+
+    fn
+  }
 
 }
