@@ -112,9 +112,9 @@ object List {
     case Cons(x, xs) => f(x, foldRight(xs, z)(f))
   }
 
-  def sum2(l: List[Int]) = foldRight(l, 0.0)(_ + _)
+  def sum2(l: List[Int]): Int = foldRight(l, 0)(_ + _)
 
-  def product2(l: List[Double]) = foldRight(l, 1.0)(_ * _)
+  def product2(l: List[Double]): Double = foldRight(l, 1.0)(_ * _)
 
   /**
     * EXERCISE 7: Can product implemented using foldRight immediately
@@ -137,11 +137,12 @@ object List {
 
   /**
     * EXERCISE 9: Compute the length of a list using foldRight.
+    *
     * @param l
     * @tparam A
     * @return
     */
-  def length[A](l: List[A]): Int = ???
+  def length[A](l: List[A]): Int = foldRight(l, 0)((a, b) => b + 1)
 
   /**
     * EXERCISE 10: foldRight is not tail-recursive and will StackOverflow
@@ -156,15 +157,96 @@ object List {
     * @tparam B
     * @return
     */
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = ???
+  def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = l match {
+    case Nil => z
+    case Cons(head, tail) => foldLeft(tail, f(z, head))(f)
+  }
+
+
+  /**
+    * EXERCISE 11: Write sum, product, and a function to compute the length of
+    * a list using foldLeft.
+    *
+    * @param l
+    * @return
+    */
+  def sum3(l: List[Int]): Int = foldLeft(l, 0)(_ + _)
+
+  def product3(l: List[Double]): Double = foldLeft(l, 1.0)(_ * _)
+
+  def lengthViaFoldLeft[A](l: List[A]): Int = foldLeft(l, 0)((b, a) => b + 1)
+
+  /**
+    * EXERCISE 12: Write a function that returns the reverse of a list (so given
+    * List(1,2,3) it returns List(3,2,1)). See if you can write it using a fold.
+    *
+    * @param l
+    * @tparam A
+    * @return
+    */
+  def reverse[A](l: List[A]): List[A] = {
+    def loop(l: List[A], acc: List[A]): List[A] = l match {
+      case Nil => acc
+      case Cons(head, tail) => loop(tail, Cons(head, acc))
+    }
+
+    loop(l, Nil)
+  }
+
+  def reverseViaFoldLeft[A](l: List[A]): List[A] = foldLeft(l, Nil: List[A])((b, a) => Cons(a, b))
+
+  /**
+    * EXERCISE 13 (hard): Can you write foldLeft in terms of foldRight?
+    * How about the other way around?
+    *
+    * @param l
+    * @param z
+    * @param f
+    * @tparam A
+    * @tparam B
+    * @return
+    */
+  def foldLeftViaFoldRight[A, B](l: List[A], z: B)(f: (B, A) => B): B = foldRight(l, z)((a, b) => f(b, a))
+
+  def foldRightViaFoldLeft[A, B](l: List[A], z: B)(f: (A, B) => B): B = foldLeft(l, z)((b, a) => f(a, b))
+
+  /**
+    * EXERCISE 14: Implement append in terms of either foldLeft or
+    * foldRight.
+    *
+    * @param a1
+    * @param a2
+    * @tparam A
+    * @return
+    */
+  def appendViaFoldLeft[A](a1: List[A], a2: List[A]): List[A] = {
+
+    ???
+  }
+
+  def appendViaFoldRight[A](a1: List[A], a2: List[A]): List[A] = {
+    ???
+  }
+
+  /**
+    * EXERCISE 15 (hard): Write a function that concatenates a list of lists into a
+    * single list. Its runtime should be linear in the total length of all lists. Try to use
+    * functions we have already defined.
+    *
+    * @param l
+    * @tparam A
+    * @return
+    */
+  def concatenateLists[A](l: List[List[A]]): List[A] = ???
 
   /**
     * main method
+    *
     * @param args
     */
   def main(args: Array[String]): Unit = {
-    val folded = foldRight(List(1,2,3), Nil: List[Int])(Cons(_, _))
-    println(folded)
+    println(length(example))
+    println(reverse(example))
   }
 
 
