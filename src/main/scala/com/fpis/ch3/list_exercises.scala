@@ -103,7 +103,7 @@ object List {
     */
   def init[A](l: List[A]): List[A] = l match {
     case Nil => throw new RuntimeException("Calling init on Nil")
-    case Cons(head, Nil) => Nil
+    case Cons(_, Nil) => Nil
     case Cons(head, tail) => Cons(head, init(tail))
   }
 
@@ -219,14 +219,11 @@ object List {
     * @tparam A
     * @return
     */
-  def appendViaFoldLeft[A](a1: List[A], a2: List[A]): List[A] = {
+  def appendViaFoldLeft[A](a1: List[A], a2: List[A]): List[A] =
+    foldLeft(reverseViaFoldLeft(a1), a2)((b, a) => Cons(a, b))
 
-    ???
-  }
-
-  def appendViaFoldRight[A](a1: List[A], a2: List[A]): List[A] = {
-    ???
-  }
+  def appendViaFoldRight[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)((a, b) => Cons(a, b))
 
   /**
     * EXERCISE 15 (hard): Write a function that concatenates a list of lists into a
@@ -237,7 +234,21 @@ object List {
     * @tparam A
     * @return
     */
-  def concatenateLists[A](l: List[List[A]]): List[A] = ???
+  def concatenateLists[A](l: List[List[A]]): List[A] =
+    foldLeft(l, Nil: List[A])((b, a) => appendViaFoldLeft(b, a))
+
+  /**
+    * EXERCISE 16: Write a function that transforms a list of integers by adding 1
+    * to each element. (Reminder: this should be a pure function that returns a new
+    * List!)
+    *
+    * @param l
+    * @return
+    */
+  def transformByAdding1(l: List[Int]): List[Int] = l match {
+    case Nil => Nil
+    case Cons(head, tail) => Cons(head + 1, transformByAdding1(tail))
+  }
 
   /**
     * main method
@@ -247,6 +258,14 @@ object List {
   def main(args: Array[String]): Unit = {
     println(length(example))
     println(reverse(example))
+    val e1 = List(1, 2, 3, 4)
+    val e2 = List(5, 6, 7, 8, 9)
+    val e3 = List(10, 11, 12)
+    val e4 = Nil: List[Int]
+    println(appendViaFoldLeft(e1, e2))
+    println(appendViaFoldRight(e1, e2))
+    println(concatenateLists(List(e1, e2, e3, e4)))
+    println(transformByAdding1(e1))
   }
 
 
