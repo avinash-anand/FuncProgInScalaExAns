@@ -328,6 +328,33 @@ object List {
   }
 
   /**
+    * EXERCISE 22: Write a function that accepts two lists and constructs a new list
+    * by adding corresponding elements. For example, List(1,2,3) and
+    * List(4,5,6) becomes List(5,7,9).
+    *
+    * @param l1
+    * @param l2
+    * @return
+    */
+  def sumOf2List(l1: List[Int], l2: List[Int]): List[Int] = ???
+
+  /**
+    * EXERCISE 23: Generalize the function you just wrote so that it's not specific to
+    * integers or addition.
+    *
+    * @param l1
+    * @param l2
+    * @param z
+    * @param f
+    * @tparam A
+    * @tparam B
+    * @return
+    */
+  def mapOn2SimilarList[A, B](l1: List[A], l2: List[A], z: A)(f: (A, A) => B): List[B] = ???
+
+  def mapOn2List[A, B, C](l1: List[A], l2: List[B], z1: A, z2: B)(f: (A, B) => C): List[C] = ???
+
+  /**
     * main method
     *
     * @param args
