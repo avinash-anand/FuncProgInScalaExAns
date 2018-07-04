@@ -251,6 +251,80 @@ object List {
   }
 
   /**
+    * EXERCISE 17: Write a function that turns each value in a List[Double]
+    * into a String.
+    *
+    * @param l
+    * @return
+    */
+  def mkStringListOfDouble(l: List[Double]): String = l match {
+    case Nil => " "
+    case Cons(head, tail) => s"$head " + mkStringListOfDouble(tail)
+  }
+
+  /**
+    * EXERCISE 18: Write a function map, that generalizes modifying each element
+    * in a list while maintaining the structure of the list. Here is its signature:
+    *
+    * @param l
+    * @param f
+    * @tparam A
+    * @tparam B
+    * @return
+    */
+  def map[A, B](l: List[A])(f: A => B): List[B] = l match {
+    case Nil => Nil
+    case Cons(head, tail) => Cons(f(head), map(tail)(f))
+  }
+
+  /**
+    * EXERCISE 19: Write a function filter that removes elements from a list
+    * unless they satisfy a given predicate. Use it to remote all odd numbers from a
+    * List[Int].
+    *
+    * @param l
+    * @param f
+    * @tparam A
+    * @return
+    */
+  def filter[A](l: List[A])(f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(head, tail) if f(head) => Cons(head, filter(tail)(f))
+    case Cons(_, tail) => filter(tail)(f)
+  }
+
+  def filterOdd(l: List[Int]): List[Int] = filter(l)(_ % 2 == 0)
+
+  /**
+    * EXERCISE 20: Write a function flatMap, that works like map except that
+    * the function given will return a list instead of a single result, and that list should be
+    * inserted into the final resulting list. Here is its signature:
+    *
+    * For instance flatMap(List(1,2,3))(i => List(i,i)) should
+    * result in List(1,1,2,2,3,3).
+    *
+    * @param l
+    * @param f
+    * @tparam A
+    * @tparam B
+    * @return
+    */
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] = l match {
+    case Nil => Nil
+    case Cons(head, tail) => append(f(head), flatMap(tail)(f))
+  }
+
+  /**
+    * EXERCISE 21: Can you use flatMap to implement filter?
+    *
+    * @param l
+    * @param f
+    * @tparam A
+    * @return
+    */
+  def filterViaFlatMap[A](l: List[A])(f: A => Boolean): List[A] = ???
+
+  /**
     * main method
     *
     * @param args
@@ -266,6 +340,13 @@ object List {
     println(appendViaFoldRight(e1, e2))
     println(concatenateLists(List(e1, e2, e3, e4)))
     println(transformByAdding1(e1))
+    println(mkStringListOfDouble(List(1.0, 2.0, 3.0)))
+    println(map(e1)(a => a + 1))
+    println(filter(e1)(_ > 2))
+    println(filterOdd(e1))
+    println(flatMap(List(1, 2, 3))(i => List(i, i)))
+
+
   }
 
 
