@@ -322,7 +322,10 @@ object List {
     * @tparam A
     * @return
     */
-  def filterViaFlatMap[A](l: List[A])(f: A => Boolean): List[A] = ???
+  def filterViaFlatMap[A](l: List[A])(f: A => Boolean): List[A] = flatMap(l) { a =>
+    if (f(a)) Cons(a, Nil)
+    else Nil
+  }
 
   /**
     * main method
@@ -345,7 +348,7 @@ object List {
     println(filter(e1)(_ > 2))
     println(filterOdd(e1))
     println(flatMap(List(1, 2, 3))(i => List(i, i)))
-
+    println(filterViaFlatMap(List(1, 2, 3, 4))(_ % 2 == 0))
 
   }
 
