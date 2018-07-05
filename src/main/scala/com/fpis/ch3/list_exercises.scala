@@ -336,7 +336,12 @@ object List {
     * @param l2
     * @return
     */
-  def sumOf2List(l1: List[Int], l2: List[Int]): List[Int] = ???
+  def sumOf2List(l1: List[Int], l2: List[Int]): List[Int] = (l1, l2) match {
+    case (Nil, Nil) => Nil
+    case (x1: Cons[Int], Nil) => x1
+    case (Nil, y1: Cons[Int]) => y1
+    case (Cons(head1, tail1), Cons(head2, tail2)) => Cons(head1 + head2, sumOf2List(tail1, tail2))
+  }
 
   /**
     * EXERCISE 23: Generalize the function you just wrote so that it's not specific to
@@ -353,6 +358,21 @@ object List {
   def mapOn2SimilarList[A, B](l1: List[A], l2: List[A], z: A)(f: (A, A) => B): List[B] = ???
 
   def mapOn2List[A, B, C](l1: List[A], l2: List[B], z1: A, z2: B)(f: (A, B) => C): List[C] = ???
+
+  //maybe above question says about zip, so let's write zip
+  def zip[A,B](l1: List[A], l2: List[B]): List[(A,B)] = (l1,l2) match {
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1,h2), zip(t1, t2))
+  }
+  def zipAddInt(l1: List[Int], l2: List[Int]): List[Int] = {
+    map(zip(l1,l2))(a => a._1 + a._2)
+  }
+
+  def zipMap[A,B,C](l1: List[A], l2: List[B])(f: (A,B) => C): List[C] = {
+    map(zip(l1, l2))(zipped => f(zipped._1,zipped._2))
+  }
+
 
   /**
     * main method
@@ -376,6 +396,11 @@ object List {
     println(filterOdd(e1))
     println(flatMap(List(1, 2, 3))(i => List(i, i)))
     println(filterViaFlatMap(List(1, 2, 3, 4))(_ % 2 == 0))
+    println(sumOf2List(List(1,2,3),List(4,5,6)))
+    println(sumOf2List(List(1,2),List(4,5,6)))
+    println(zip(List(1,2,3), List(4,5,6)))
+    println(zipAddInt(List(1,2,3), List(4,5,6)))
+    println(zipMap(List(1,2,3), List(4,5,6))((a,b) => a + b))
 
   }
 
