@@ -355,9 +355,19 @@ object List {
     * @tparam B
     * @return
     */
-  def mapOn2SimilarList[A, B](l1: List[A], l2: List[A], z: A)(f: (A, A) => B): List[B] = ???
+  def mapOn2SimilarList[A, B](l1: List[A], l2: List[A], z: A)(f: (A, A) => B): List[B] = (l1, l2) match {
+    case (Nil, Nil) => Nil
+    case (Nil, Cons(head, tail)) => Cons(f(z,head), mapOn2SimilarList(Nil: List[A], tail, z)(f))
+    case (Cons(head, tail), Nil) => Cons(f(head,z), mapOn2SimilarList(tail, Nil: List[A], z)(f))
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), mapOn2SimilarList(t1, t2, z)(f))
+  }
 
-  def mapOn2List[A, B, C](l1: List[A], l2: List[B], z1: A, z2: B)(f: (A, B) => C): List[C] = ???
+  def mapOn2List[A, B, C](l1: List[A], l2: List[B], z1: A, z2: B)(f: (A, B) => C): List[C] = (l1, l2) match {
+    case (Nil, Nil) => Nil: List[C]
+    case (Nil, Cons(head, tail)) => Cons(f(z1,head), mapOn2List(Nil: List[A], tail, z1, z2)(f))
+    case (Cons(head, tail), Nil) => Cons(f(head,z2), mapOn2List(tail, Nil: List[B], z1, z2)(f))
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), mapOn2List(t1, t2, z1, z2)(f))
+  }
 
   //maybe above question says about zip, so let's write zip
   def zip[A,B](l1: List[A], l2: List[B]): List[(A,B)] = (l1,l2) match {
@@ -373,6 +383,22 @@ object List {
     map(zip(l1, l2))(zipped => f(zipped._1,zipped._2))
   }
 
+  /**
+    * EXERCISE 24 (hard): As an example, implement hasSubsequence for
+    * checking whether a List contains another List as a subsequence. For instance,
+    * List(1,2,3,4) would have List(1,2), List(2,3), and List(4) as
+    * subsequences, among others. You may have some difficulty finding a concise
+    * purely functional implementation that is also efficient. That's okay. Implement the
+    * function however comes most naturally. We will return to this implementation in a
+    * couple of chapters and hopefully improve on it. Note: any two values, x, and y,
+    * can be compared for equality in Scala using the expression x == y.
+    *
+    * @param l
+    * @param sub
+    * @tparam A
+    * @return
+    */
+  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = ???
 
   /**
     * main method
