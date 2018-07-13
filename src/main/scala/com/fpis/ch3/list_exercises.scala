@@ -398,7 +398,15 @@ object List {
     * @tparam A
     * @return
     */
-  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = ???
+  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = (l, sub) match {
+    case (_, Nil) => true
+    case (Nil, _) => false
+    case (Cons(lHead,_), Cons(subHead, Nil)) if lHead == subHead => true
+    case (Cons(lHead,lTail), Cons(subHead, Nil)) if lHead != subHead => hasSubsequence(lTail, sub)
+    case (Cons(lHead,lTail), Cons(subHead, subTail)) if lHead == subHead => hasSubsequence(lTail, subTail)
+    case (Cons(_,lTail), Cons(_, _)) => hasSubsequence(lTail, sub)
+    case any => ??? //TODO: FIX THIS
+  }
 
   /**
     * main method
@@ -406,28 +414,33 @@ object List {
     * @param args
     */
   def main(args: Array[String]): Unit = {
-    println(length(example))
-    println(reverse(example))
-    val e1 = List(1, 2, 3, 4)
-    val e2 = List(5, 6, 7, 8, 9)
-    val e3 = List(10, 11, 12)
-    val e4 = Nil: List[Int]
-    println(appendViaFoldLeft(e1, e2))
-    println(appendViaFoldRight(e1, e2))
-    println(concatenateLists(List(e1, e2, e3, e4)))
-    println(transformByAdding1(e1))
-    println(mkStringListOfDouble(List(1.0, 2.0, 3.0)))
-    println(map(e1)(a => a + 1))
-    println(filter(e1)(_ > 2))
-    println(filterOdd(e1))
-    println(flatMap(List(1, 2, 3))(i => List(i, i)))
-    println(filterViaFlatMap(List(1, 2, 3, 4))(_ % 2 == 0))
-    println(sumOf2List(List(1,2,3),List(4,5,6)))
-    println(sumOf2List(List(1,2),List(4,5,6)))
-    println(zip(List(1,2,3), List(4,5,6)))
-    println(zipAddInt(List(1,2,3), List(4,5,6)))
-    println(zipMap(List(1,2,3), List(4,5,6))((a,b) => a + b))
-
+//    println(length(example))
+//    println(reverse(example))
+//    val e1 = List(1, 2, 3, 4)
+//    val e2 = List(5, 6, 7, 8, 9)
+//    val e3 = List(10, 11, 12)
+//    val e4 = Nil: List[Int]
+//    println(appendViaFoldLeft(e1, e2))
+//    println(appendViaFoldRight(e1, e2))
+//    println(concatenateLists(List(e1, e2, e3, e4)))
+//    println(transformByAdding1(e1))
+//    println(mkStringListOfDouble(List(1.0, 2.0, 3.0)))
+//    println(map(e1)(a => a + 1))
+//    println(filter(e1)(_ > 2))
+//    println(filterOdd(e1))
+//    println(flatMap(List(1, 2, 3))(i => List(i, i)))
+//    println(filterViaFlatMap(List(1, 2, 3, 4))(_ % 2 == 0))
+//    println(sumOf2List(List(1,2,3),List(4,5,6)))
+//    println(sumOf2List(List(1,2),List(4,5,6)))
+//    println(zip(List(1,2,3), List(4,5,6)))
+//    println(zipAddInt(List(1,2,3), List(4,5,6)))
+//    println(zipMap(List(1,2,3), List(4,5,6))((a,b) => a + b))
+    println(hasSubsequence(List(1,2,3,4), List(1,2)))
+    println(hasSubsequence(List(1,2,3,4), List(2,3)))
+    println(hasSubsequence(List(1,2,3,4), List(3,4)))
+    println(hasSubsequence(List(1,2,3,4), List(4)))
+    println(hasSubsequence(List(1,2,3,4), List(3)))
+    println(hasSubsequence(List(1,2,3,4), List(1,3)))
   }
 
 
