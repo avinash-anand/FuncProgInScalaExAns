@@ -357,30 +357,31 @@ object List {
     */
   def mapOn2SimilarList[A, B](l1: List[A], l2: List[A], z: A)(f: (A, A) => B): List[B] = (l1, l2) match {
     case (Nil, Nil) => Nil
-    case (Nil, Cons(head, tail)) => Cons(f(z,head), mapOn2SimilarList(Nil: List[A], tail, z)(f))
-    case (Cons(head, tail), Nil) => Cons(f(head,z), mapOn2SimilarList(tail, Nil: List[A], z)(f))
-    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), mapOn2SimilarList(t1, t2, z)(f))
+    case (Nil, Cons(head, tail)) => Cons(f(z, head), mapOn2SimilarList(Nil: List[A], tail, z)(f))
+    case (Cons(head, tail), Nil) => Cons(f(head, z), mapOn2SimilarList(tail, Nil: List[A], z)(f))
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), mapOn2SimilarList(t1, t2, z)(f))
   }
 
   def mapOn2List[A, B, C](l1: List[A], l2: List[B], z1: A, z2: B)(f: (A, B) => C): List[C] = (l1, l2) match {
     case (Nil, Nil) => Nil: List[C]
-    case (Nil, Cons(head, tail)) => Cons(f(z1,head), mapOn2List(Nil: List[A], tail, z1, z2)(f))
-    case (Cons(head, tail), Nil) => Cons(f(head,z2), mapOn2List(tail, Nil: List[B], z1, z2)(f))
-    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), mapOn2List(t1, t2, z1, z2)(f))
+    case (Nil, Cons(head, tail)) => Cons(f(z1, head), mapOn2List(Nil: List[A], tail, z1, z2)(f))
+    case (Cons(head, tail), Nil) => Cons(f(head, z2), mapOn2List(tail, Nil: List[B], z1, z2)(f))
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), mapOn2List(t1, t2, z1, z2)(f))
   }
 
   //maybe above question says about zip, so let's write zip
-  def zip[A,B](l1: List[A], l2: List[B]): List[(A,B)] = (l1,l2) match {
+  def zip[A, B](l1: List[A], l2: List[B]): List[(A, B)] = (l1, l2) match {
     case (Nil, _) => Nil
     case (_, Nil) => Nil
-    case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1,h2), zip(t1, t2))
-  }
-  def zipAddInt(l1: List[Int], l2: List[Int]): List[Int] = {
-    map(zip(l1,l2))(a => a._1 + a._2)
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1, h2), zip(t1, t2))
   }
 
-  def zipMap[A,B,C](l1: List[A], l2: List[B])(f: (A,B) => C): List[C] = {
-    map(zip(l1, l2))(zipped => f(zipped._1,zipped._2))
+  def zipAddInt(l1: List[Int], l2: List[Int]): List[Int] = {
+    map(zip(l1, l2))(a => a._1 + a._2)
+  }
+
+  def zipMap[A, B, C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] = {
+    map(zip(l1, l2))(zipped => f(zipped._1, zipped._2))
   }
 
   /**
@@ -398,14 +399,16 @@ object List {
     * @tparam A
     * @return
     */
-  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = (l, sub) match {
+  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = l match {
+    case Nil => sub == Nil
+    case _ if startsWith(l, sub) => true
+    case Cons(_, lTail) => hasSubsequence(lTail, sub)
+  }
+
+  def startsWith[A](l: List[A], startList: List[A]): Boolean = (l, startList) match {
     case (_, Nil) => true
-    case (Nil, _) => false
-    case (Cons(lHead,_), Cons(subHead, Nil)) if lHead == subHead => true
-    case (Cons(lHead,lTail), Cons(subHead, Nil)) if lHead != subHead => hasSubsequence(lTail, sub)
-    case (Cons(lHead,lTail), Cons(subHead, subTail)) if lHead == subHead => hasSubsequence(lTail, subTail)
-    case (Cons(_,lTail), Cons(_, _)) => hasSubsequence(lTail, sub)
-    case any => ??? //TODO: FIX THIS
+    case (Cons(lHead, lTail), Cons(startHead, startTail)) if lHead == startHead => startsWith(lTail, startTail)
+    case _ => false
   }
 
   /**
@@ -414,33 +417,33 @@ object List {
     * @param args
     */
   def main(args: Array[String]): Unit = {
-//    println(length(example))
-//    println(reverse(example))
-//    val e1 = List(1, 2, 3, 4)
-//    val e2 = List(5, 6, 7, 8, 9)
-//    val e3 = List(10, 11, 12)
-//    val e4 = Nil: List[Int]
-//    println(appendViaFoldLeft(e1, e2))
-//    println(appendViaFoldRight(e1, e2))
-//    println(concatenateLists(List(e1, e2, e3, e4)))
-//    println(transformByAdding1(e1))
-//    println(mkStringListOfDouble(List(1.0, 2.0, 3.0)))
-//    println(map(e1)(a => a + 1))
-//    println(filter(e1)(_ > 2))
-//    println(filterOdd(e1))
-//    println(flatMap(List(1, 2, 3))(i => List(i, i)))
-//    println(filterViaFlatMap(List(1, 2, 3, 4))(_ % 2 == 0))
-//    println(sumOf2List(List(1,2,3),List(4,5,6)))
-//    println(sumOf2List(List(1,2),List(4,5,6)))
-//    println(zip(List(1,2,3), List(4,5,6)))
-//    println(zipAddInt(List(1,2,3), List(4,5,6)))
-//    println(zipMap(List(1,2,3), List(4,5,6))((a,b) => a + b))
-    println(hasSubsequence(List(1,2,3,4), List(1,2)))
-    println(hasSubsequence(List(1,2,3,4), List(2,3)))
-    println(hasSubsequence(List(1,2,3,4), List(3,4)))
-    println(hasSubsequence(List(1,2,3,4), List(4)))
-    println(hasSubsequence(List(1,2,3,4), List(3)))
-    println(hasSubsequence(List(1,2,3,4), List(1,3)))
+    //    println(length(example))
+    //    println(reverse(example))
+    //    val e1 = List(1, 2, 3, 4)
+    //    val e2 = List(5, 6, 7, 8, 9)
+    //    val e3 = List(10, 11, 12)
+    //    val e4 = Nil: List[Int]
+    //    println(appendViaFoldLeft(e1, e2))
+    //    println(appendViaFoldRight(e1, e2))
+    //    println(concatenateLists(List(e1, e2, e3, e4)))
+    //    println(transformByAdding1(e1))
+    //    println(mkStringListOfDouble(List(1.0, 2.0, 3.0)))
+    //    println(map(e1)(a => a + 1))
+    //    println(filter(e1)(_ > 2))
+    //    println(filterOdd(e1))
+    //    println(flatMap(List(1, 2, 3))(i => List(i, i)))
+    //    println(filterViaFlatMap(List(1, 2, 3, 4))(_ % 2 == 0))
+    //    println(sumOf2List(List(1,2,3),List(4,5,6)))
+    //    println(sumOf2List(List(1,2),List(4,5,6)))
+    //    println(zip(List(1,2,3), List(4,5,6)))
+    //    println(zipAddInt(List(1,2,3), List(4,5,6)))
+    //    println(zipMap(List(1,2,3), List(4,5,6))((a,b) => a + b))
+    println(hasSubsequence(List(1, 2, 3, 4), List(1, 2)))
+    println(hasSubsequence(List(1, 2, 3, 4), List(2, 3)))
+    println(hasSubsequence(List(1, 2, 3, 4), List(3, 4)))
+    println(hasSubsequence(List(1, 2, 3, 4), List(4)))
+    println(hasSubsequence(List(1, 2, 3, 4), List(3)))
+    println(hasSubsequence(List(1, 2, 3, 4), List(1, 3)))
   }
 
 
