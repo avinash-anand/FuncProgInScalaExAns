@@ -90,7 +90,7 @@ object Tree {
     case Branch(left, right) => f2(fold(left)(f1)(f2), fold(right)(f1)(f2))
   }
 
-  def sizeViaFold[A](t: Tree[A]): Int = fold(t)(a => 1)((leftTreeSize, rightTreeSize) => 1 + leftTreeSize + rightTreeSize)
+  def sizeViaFold[A](t: Tree[A]): Int = fold(t)(a => 1)((leftTreeSize, rightTreeSize) => leftTreeSize + rightTreeSize)
 
   def maximumViaFold(t: Tree[Int]): Int = fold(t)(a => a)((b1, b2) => b1 max b2)
 
