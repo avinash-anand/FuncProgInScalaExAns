@@ -89,7 +89,7 @@ object Ex_2 {
 
 }
 
-object Ex_3 {
+object Ex_3_4_5_6 {
 
   import java.util.regex._
 
@@ -153,5 +153,31 @@ object Ex_3 {
     map2(pattern(pat1), pattern(pat2)) { (p1, p2) =>
       p1.matcher(s).matches() && p2.matcher(s).matches()
     }
+
+  /**
+    * EXERCISE 5: Write a function sequence, that combines a list of Options
+    * into one option containing a list of all the Some values in the original list. If the
+    * original list contains None even once, the result of the function should be None,
+    * otherwise the result should be Some with a list of all the values. Here is its
+    * signature:
+    *
+    * @param a
+    * @tparam A
+    * @return
+    */
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = a match {
+    case Nil => Some(Nil)
+    case head :: tail => head.flatMap(h1 => sequence(tail) map (l => h1 :: l))
+  }
+
+  def sequenceViaFoldRight[A](a: List[Option[A]]): Option[List[A]] =
+    a.foldRight(Some(Nil): Option[List[A]])((optA, b) => map2(optA, b)((a, b) => a :: b))
+
+  def main(args: Array[String]): Unit = {
+    println(sequence(List(Some(1), Some(2), Some(3))))
+    println(sequence(List(Some(1), Some(2), None)))
+    println(sequenceViaFoldRight(List(Some(1), Some(2), Some(3))))
+    println(sequenceViaFoldRight(List(Some(1), Some(2), None)))
+  }
 
 }
