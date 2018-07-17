@@ -50,7 +50,7 @@ object Tree {
   def depth[A](t: Tree[A]): Int = {
 
     def loop[A](t: Tree[A], depth: Int): Int = t match {
-      case Leaf(_) => depth + 1
+      case Leaf(_) => depth
       case Branch(left, right) => loop(left, depth + 1) max loop(right, depth + 1)
     }
 
@@ -90,7 +90,14 @@ object Tree {
     case Branch(left, right) => f2(fold(left)(f1)(f2), fold(right)(f1)(f2))
   }
 
-  def sizeViaFold[A](t: Tree[A]): Int = fold(t)(a => 1)((b1, b2) => 1 + b1 + b2)
+  def sizeViaFold[A](t: Tree[A]): Int = fold(t)(a => 1)((leftTreeSize, rightTreeSize) => 1 + leftTreeSize + rightTreeSize)
+
+  def maximumViaFold(t: Tree[Int]): Int = fold(t)(a => a)((b1, b2) => b1 max b2)
+
+  def depthViaFold[A](t: Tree[A]): Int = fold(t)(a => 0)((b1, b2) => 1 + (b1 max b2))
+
+  def mapViaFold[A,B](t: Tree[A])(f: A => B): Tree[B] =
+    fold(t)(a => Leaf(f(a)): Tree[B])((b1, b2) => Branch(b1, b2))
 
 
   def main(args: Array[String]): Unit = {
@@ -100,6 +107,10 @@ object Tree {
     println(maximum(tree1))
     println(depth(tree1))
     println(map(tree1)(a => a + 1))
+    println(sizeViaFold(tree1))
+    println(maximumViaFold(tree1))
+    println(depthViaFold(tree1))
+    println(mapViaFold(tree1)(a => a + 1))
 
   }
 
