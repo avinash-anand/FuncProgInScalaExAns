@@ -173,6 +173,21 @@ object Ex_3_4_5_6 {
   def sequenceViaFoldRight[A](a: List[Option[A]]): Option[List[A]] =
     a.foldRight(Some(Nil): Option[List[A]])((optA, b) => map2(optA, b)((a, b) => a :: b))
 
+  /** Wanting to sequence the results of a map this way is a common enough occurrence to
+    * warrant a new generic function traverse, with the following signature:
+    * {{{def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]]}}}
+    * EXERCISE 6: Implement this function. It is straightforward to do using map
+    * and sequence, but try for a more efficient implementation that only looks at the
+    * list once. In fact, implement sequence in terms of traverse.
+    *
+    * @param a
+    * @param f
+    * @tparam A
+    * @tparam B
+    * @return
+    */
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
+
   def main(args: Array[String]): Unit = {
     println(sequence(List(Some(1), Some(2), Some(3))))
     println(sequence(List(Some(1), Some(2), None)))
