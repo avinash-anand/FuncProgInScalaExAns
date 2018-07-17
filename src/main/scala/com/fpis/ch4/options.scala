@@ -53,3 +53,105 @@ sealed trait Option[+A] {
 case class Some[+A](get: A) extends Option[A]
 
 case object None extends Option[Nothing]
+
+object Ex_2 {
+
+  def main(args: Array[String]): Unit = {
+    val s1 = Seq(1.0, 2, 3, 4, 5)
+    println(mean(s1))
+    println(variance(s1))
+  }
+
+  def mean(xs: Seq[Double]): Option[Double] =
+    if (xs.isEmpty) None
+    else Some(xs.sum / xs.length)
+
+  /**
+    * EXERCISE 2: Implement the variance function (if the mean is m, variance
+    * is the mean of math.pow(x - m, 2), see definition) in terms of mean and
+    * flatMap.3
+    * Footnote 3mVariance can actually be computed in one pass,
+    * but for pedagogical purposes we will compute it
+    * using two passes. The first will compute the mean of the data set,
+    * and the second will compute the mean squared
+    * difference from this mean.
+    *
+    * @param xs
+    * @return
+    */
+  def variance(xs: Seq[Double]): Option[Double] = {
+    val meanFound: Option[Double] = mean(xs)
+    meanFound match {
+      case Some(m) => mean(xs.map(a => Math.pow(a - m, 2)))
+      case None => None
+    }
+  }
+
+}
+
+object Ex_3 {
+
+  import java.util.regex._
+
+  def pattern(s: String): Option[Pattern] =
+    try {
+      Some(Pattern.compile(s))
+    } catch {
+      case e: PatternSyntaxException => None
+    }
+
+  def mkMatcher(pat: String): Option[String => Boolean] =
+    pattern(pat) map (p => (s: String) => p.matcher(s).matches)
+
+  def mkMatcher_1(pat: String): Option[String => Boolean] =
+    for {
+      p <- pattern(pat)
+    } yield (s: String) => p.matcher(s).matches
+
+  def doesMatch(pat: String, s: String): Option[Boolean] =
+    for {
+      p <- mkMatcher_1(pat)
+    } yield p(s)
+
+  def bothMatch(pat: String, pat2: String, s: String): Option[Boolean] =
+    for {
+      f <- mkMatcher(pat)
+      g <- mkMatcher(pat2)
+    } yield f(s) && g(s)
+
+  def bothMatch_1(pat: String, pat2: String, s: String): Option[Boolean] =
+    mkMatcher(pat) flatMap (f =>
+      mkMatcher(pat2) map (g =>
+        f(s) && g(s)))
+
+  /**
+    * EXERCISE 3: is an instance of a more general bothMatch pattern. Write a
+    * generic function map2, that combines two Option values using a binary function.
+    * If either Option value is None, then the return value is too. Here is its signature:
+    *
+    * @param a
+    * @param b
+    * @param f
+    * @tparam A
+    * @tparam B
+    * @tparam C
+    * @return
+    */
+  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+    a flatMap (a1 => b.map(b1 => f(a1, b1)))
+
+  /**
+    * EXERCISE 4: Re-implement bothMatch above in terms of this new function,
+    * to the extent possible.
+    *
+    * @param pat1
+    * @param pat2
+    * @param s
+    * @return
+    */
+  def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] =
+    map2(pattern(pat1), pattern(pat2)) { (p1, p2) =>
+      p1.matcher(s).matches() && p2.matcher(s).matches()
+    }
+
+}
