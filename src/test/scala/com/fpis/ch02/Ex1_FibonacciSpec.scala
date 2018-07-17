@@ -1,4 +1,4 @@
-package com.fpis.ch2
+package com.fpis.ch02
 
 import org.scalatest.{FlatSpec, Matchers}
 

@@ -1,4 +1,4 @@
-package com.fpis.ch2
+package com.fpis.ch02
 
 /**
   * EXERCISE 6: Implement the higher-order function that composes two

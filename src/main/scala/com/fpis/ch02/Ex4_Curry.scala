@@ -1,4 +1,4 @@
-package com.fpis.ch2
+package com.fpis.ch02
 
 /**
   * EXERCISE 4 (hard): Let's look at another example, currying, which converts a

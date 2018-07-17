@@ -1,4 +1,4 @@
-package com.fpis.ch3
+package com.fpis.ch03
 
 /**
   * EXERCISE 1: What will the result of the following match expression be?

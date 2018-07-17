@@ -1,4 +1,4 @@
-package com.fpis.ch3
+package com.fpis.ch03
 
 sealed trait List[+A]
 

@@ -1,4 +1,4 @@
-package com.fpis.ch2
+package com.fpis.ch02
 
 /**
   * EXERCISE 3 (hard): Implement partial1 and write down a concrete usage

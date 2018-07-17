@@ -1,4 +1,4 @@
-package com.fpis.ch2
+package com.fpis.ch02
 
 /**
   * EXERCISE 5 (optional): Implement uncurry, which reverses the

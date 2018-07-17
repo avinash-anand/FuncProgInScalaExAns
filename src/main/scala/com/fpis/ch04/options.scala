@@ -1,4 +1,4 @@
-package com.fpis.ch4
+package com.fpis.ch04
 
 /**
   * EXERCISE 1: We'll explore when you'd use each of these next. But first, as an
