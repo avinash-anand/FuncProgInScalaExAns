@@ -186,13 +186,25 @@ object Ex_3_4_5_6 {
     * @tparam B
     * @return
     */
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = a match {
+    case Nil => Some(Nil)
+    case head :: tail => map2(f(head), traverse(tail)(f))((a1, b1) => a1 :: b1)
+  }
+
+  def traverseViaMapAndSequence[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    sequence(a map f)
+
+  def sequence2[A](a: List[Option[A]]): Option[List[A]] = traverse(a)(a1 => a1)
 
   def main(args: Array[String]): Unit = {
     println(sequence(List(Some(1), Some(2), Some(3))))
     println(sequence(List(Some(1), Some(2), None)))
     println(sequenceViaFoldRight(List(Some(1), Some(2), Some(3))))
     println(sequenceViaFoldRight(List(Some(1), Some(2), None)))
+    println(traverse(List(Some(1), Some(2), Some(3)))(a1 => a1))
+    println(traverseViaMapAndSequence(List(Some(1), Some(2), None))(a1 => a1))
+    println(sequence2(List(Some(1), Some(2), Some(3))))
+    println(sequence2(List(Some(1), Some(2), None)))
   }
 
 }
